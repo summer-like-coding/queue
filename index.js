@@ -13,21 +13,27 @@ class Node {
 }
 
 export default class Queue {
-	#head;
-	#tail;
-	#size;
+	#head;//头指针
+	#tail;//当前节点
+	#size;//大小
 
 	constructor() {
+		//确保队列里面是空的，就是和上一次的新建没有关系
 		this.clear();
 	}
 
 	enqueue(value) {
 		const node = new Node(value);
-
+		console.log("node",node);
 		if (this.#head) {
-			this.#tail.next = node;
-			this.#tail = node;
+			console.log("当前值1",this.#tail);
+			this.#tail.next = node;//让当前值的下一个节点指向这个节点
+			console.log("当前值2",this.#tail);
+			this.#tail = node;//当前值就是这个节点
+			console.log("当前值3",this.#tail);
 		} else {
+			// 但是队列是空的，那么就让头节点作为当前节点
+			// 当前节点就是这个节点
 			this.#head = node;
 			this.#tail = node;
 		}
@@ -37,10 +43,11 @@ export default class Queue {
 
 	dequeue() {
 		const current = this.#head;
+		console.log("current",current);//所以他模拟的其实是unshift()
 		if (!current) {
 			return;
 		}
-
+		// 将头节点后移
 		this.#head = this.#head.next;
 		this.#size--;
 		return current.value;
@@ -58,10 +65,22 @@ export default class Queue {
 
 	* [Symbol.iterator]() {
 		let current = this.#head;
-
+		console.log("iterator-current",current);
 		while (current) {
 			yield current.value;
 			current = current.next;
 		}
 	}
+}
+const queue = new Queue();
+console.log("queue",queue);
+queue.enqueue("hello")
+console.log("queue", queue);
+queue.enqueue("summer")
+console.log("queue", queue);
+const item = queue.dequeue()
+console.log("item", item);
+console.log("queue", queue);
+for (let value of queue) {
+	console.log("value",value);
 }
